@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="lib/p5.min.js"></script>
+  <script src="lib/p5.sound.js"></script>
+  <script src="sketch.js"></script>
+  <script src="controlsAndInput.js"></script>
+  <script src="playbackButton.js"></script>
+  <script src="visualisations.js"></script>
+  <script src="needles.js"></script>
+  <script src="wavepattern.js"></script>
+  <script src="spectrum.js"></script>
+  <script src="CircularWaves.js"></script>
+  <script src="wheelpattern.js"></script>
+  <script src="particlepattern.js"></script>
+  <script src="horizontalspectrum.js"></script>
+  <script src="rectangularshapes.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #b4c7d3 !important; 
+      width: 100%;
+      height: 100%;
+    }
+    .heading {
+      width: 100%;
+      text-align: center;
+    }
+
+    .body {
+      margin: 1rem 0 0 0;
+      text-align: center;
+    }
+
+    .input-form{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0 2rem 0;
+      
+    }
+
+    .audio-div{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .visible{
+      display: flex ;
+      justify-content: center;
+    }
+
+    .hidden{
+      display: none;
+    }
+
+    .button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 5px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 0 3rem;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .button2 {
+      background-color: white; 
+      color: black; 
+      border: 2px solid #008CBA;
+    }
+
+    .button2:hover {
+      background-color: #008CBA;
+      color: white;
+    }
+
+  </style>
+</head>
+
+<body>
+  <h1 class="heading">Audio Visualizer using JavaScript</h1>
+  <div class="body">
+    <div class="input-form">
+      <label style="margin-right: 4rem;">
+        <input type="radio" name="musicOption" value="default" checked>
+        Use Default Sound
+      </label>
+   
+      <div class="audio-div">
+        <label>
+          <input type="radio" name="musicOption" value="select">
+          Select Music
+        </label>
+    
+        <div id="fileUpload" class="hidden" style="width: 100%;" >
+          <input type="file" accept=".mp3" id="musicFile" name="musicFile">
+        </div>
+      </div>
+      <button class="button button2" onclick="startVisuals()">Start</button>
+    </div>
+  </div>
+
+  <script>
+    // Selecting the radio buttons for default and select music options
+const selectMusicRadio = document.querySelector('input[value="select"]');
+const defaultMusicRadio = document.querySelector('input[value="default"]');
+
+// Selecting the file upload div and music file input element
+const fileUploadDiv = document.getElementById('fileUpload');
+const musicFileInput = document.getElementById('musicFile');
+
+// Variable to store the user-selected music file
+let userSelectedFile = null;
+
+// Event listener for when the "Select Music" radio button is changed
+selectMusicRadio.addEventListener('change', function () {
+  if (this.checked) {
+    // If "Select Music" is chosen, display the file upload div
+    fileUploadDiv.classList.remove('hidden');
+    fileUploadDiv.classList.add('visible');
+  } else {
+    // If another option is chosen, hide the file upload div and clear the input value
+    fileUploadDiv.classList.remove('visible');
+    fileUploadDiv.classList.add('hidden');
+    musicFileInput.value = '';
+  }
+});
+
+// Event listener for when the "Default Sound" radio button is changed
+defaultMusicRadio.addEventListener('change', function () {
+  if (this.checked) {
+    // If "Default Sound" is chosen, hide the file upload div and clear the input value
+    fileUploadDiv.classList.add('hidden');
+    musicFileInput.value = '';
+  }
+});
+
+// Function to start the visualizations
+function startVisuals() {
+  // Check if "Select Music" is chosen and a file is uploaded
+  if (selectMusicRadio.checked && musicFileInput.files.length > 0) {
+    // Get the selected file
+    const selectedFile = musicFileInput.files[0];
+
+    // Check if the selected file is an audio file (You can add this check if needed)
+    // if (selectedFile.type === 'audio/mp3') {
+    // Create a URL for the selected file
+    const fileURL = URL.createObjectURL(selectedFile);
+
+    // Initialize the p5 sound with the user-selected music file
+    sound = loadSound(fileURL);
+
+    // } else {
+    //   alert('Please select a valid audio file (MP3).');
+    // }
+  }
+  // If "Default Sound" is chosen or no file is uploaded, load the default sound
+  else {
+    sound = loadSound('assets/stomper_reggae_bit.mp3');
+  }
+
+  shouldDraw = true; // Start the visualizations
+}
+
+  </script>
+</body>
+</html>
